@@ -8,7 +8,7 @@ package us.codecraft.webmagic.scheduler;
 
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
@@ -52,7 +52,7 @@ public class BloomFilterDuplicateRemover implements DuplicateRemover {
     private final BloomFilter<CharSequence> bloomFilter;
 
     @Override
-    public boolean isDuplicate(Request request, Task task) {
+    public boolean isDuplicate(DownloadRequest request, Task task) {
         boolean isDuplicate = bloomFilter.mightContain(getUrl(request));
         if (!isDuplicate) {
             bloomFilter.put(getUrl(request));
@@ -61,7 +61,7 @@ public class BloomFilterDuplicateRemover implements DuplicateRemover {
         return isDuplicate;
     }
 
-    protected String getUrl(Request request) {
+    protected String getUrl(DownloadRequest request) {
         return request.getUrl();
     }
 

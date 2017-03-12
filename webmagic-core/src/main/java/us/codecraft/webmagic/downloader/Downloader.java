@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.downloader;
 
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 
 /**
@@ -21,7 +21,7 @@ public interface Downloader {
      * @param task task
      * @return page
      */
-    public Page download(Request request, Task task);
+    public Page download(DownloadRequest request, Task task);
 
     /**
      * Tell the downloader how many threads the spider used.

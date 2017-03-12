@@ -2,7 +2,7 @@ package us.codecraft.webmagic.scheduler;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 
@@ -27,22 +27,22 @@ public class PrioritySchedulerTest {
 
     @Test
     public void testDifferentPriority() {
-        Request request = new Request("a");
+        DownloadRequest request = new DownloadRequest("a");
         request.setPriority(100);
         priorityScheduler.push(request,task);
 
-        request = new Request("b");
+        request = new DownloadRequest("b");
         request.setPriority(900);
         priorityScheduler.push(request,task);
 
-        request = new Request("c");
+        request = new DownloadRequest("c");
         priorityScheduler.push(request,task);
 
-        request = new Request("d");
+        request = new DownloadRequest("d");
         request.setPriority(-900);
         priorityScheduler.push(request,task);
 
-        Request poll = priorityScheduler.poll(task);
+        DownloadRequest poll = priorityScheduler.poll(task);
         Assert.assertEquals("b",poll.getUrl());
         poll = priorityScheduler.poll(task);
         Assert.assertEquals("a",poll.getUrl());
@@ -54,16 +54,16 @@ public class PrioritySchedulerTest {
 
     @Test
     public void testNoPriority() {
-        Request request = new Request("a");
+        DownloadRequest request = new DownloadRequest("a");
         priorityScheduler.push(request,task);
 
-        request = new Request("b");
+        request = new DownloadRequest("b");
         priorityScheduler.push(request,task);
 
-        request = new Request("c");
+        request = new DownloadRequest("c");
         priorityScheduler.push(request,task);
 
-        Request poll = priorityScheduler.poll(task);
+        DownloadRequest poll = priorityScheduler.poll(task);
         Assert.assertEquals("a",poll.getUrl());
 
         poll = priorityScheduler.poll(task);

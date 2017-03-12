@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 
@@ -41,9 +41,9 @@ public class RedisPrioritySchedulerTest
 
         scheduler.resetDuplicateCheck(task);
 
-        Request request = new Request("https://www.google.com");
-        Request request1= new Request("https://www.facebook.com/");
-        Request request2= new Request("https://twitter.com");
+        DownloadRequest request = new DownloadRequest("https://www.google.com");
+        DownloadRequest request1= new DownloadRequest("https://www.facebook.com/");
+        DownloadRequest request2= new DownloadRequest("https://twitter.com");
 
         request.setPriority(1).putExtra("name", "google");
         request1.setPriority(0).putExtra("name", "facebook");
@@ -53,9 +53,9 @@ public class RedisPrioritySchedulerTest
         scheduler.push(request1, task);
         scheduler.push(request2, task);
 
-        Request GRequest    = scheduler.poll(task);
-        Request FBRequest   = scheduler.poll(task);
-        Request TRequest    = scheduler.poll(task);
+        DownloadRequest GRequest    = scheduler.poll(task);
+        DownloadRequest FBRequest   = scheduler.poll(task);
+        DownloadRequest TRequest    = scheduler.poll(task);
 
         Assert.assertEquals(GRequest.getUrl(), request.getUrl());
         Assert.assertEquals(GRequest.getExtra("name"), request.getExtra("name"));

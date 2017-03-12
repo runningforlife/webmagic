@@ -2,7 +2,7 @@ package us.codecraft.webmagic.pipeline;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
@@ -21,7 +21,7 @@ public class FilePipelineTest {
     public static void before() {
         resultItems = new ResultItems();
         resultItems.put("content", "webmagic 爬虫工具");
-        Request request = new Request("http://www.baidu.com");
+        DownloadRequest request = new DownloadRequest("http://www.baidu.com");
         resultItems.setRequest(request);
 
         task = new Task() {

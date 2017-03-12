@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.scheduler.component;
 
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 
 import java.util.Collections;
@@ -15,11 +15,11 @@ public class HashSetDuplicateRemover implements DuplicateRemover {
     private Set<String> urls = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
     @Override
-    public boolean isDuplicate(Request request, Task task) {
+    public boolean isDuplicate(DownloadRequest request, Task task) {
         return !urls.add(getUrl(request));
     }
 
-    protected String getUrl(Request request) {
+    protected String getUrl(DownloadRequest request) {
         return request.getUrl();
     }
 

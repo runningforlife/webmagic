@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.samples.scheduler;
 
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.PriorityScheduler;
 
@@ -27,9 +27,9 @@ public class DelayQueueScheduler extends PriorityScheduler {
 
         private long startTime = System.currentTimeMillis();
 
-        private Request request;
+        private DownloadRequest request;
 
-        private RequestWrapper(Request request) {
+        private RequestWrapper(DownloadRequest request) {
             this.request = request;
         }
 
@@ -37,7 +37,7 @@ public class DelayQueueScheduler extends PriorityScheduler {
             return startTime;
         }
 
-        private Request getRequest() {
+        private DownloadRequest getRequest() {
             return request;
         }
 
@@ -59,7 +59,7 @@ public class DelayQueueScheduler extends PriorityScheduler {
     }
 
     @Override
-    public synchronized void push(Request request, Task task) {
+    public synchronized void push(DownloadRequest request, Task task) {
         if (urls.add(request.getUrl())) {
             queue.add(new RequestWrapper(request));
         }
@@ -67,7 +67,7 @@ public class DelayQueueScheduler extends PriorityScheduler {
     }
 
     @Override
-    public synchronized Request poll(Task task) {
+    public synchronized DownloadRequest poll(Task task) {
         RequestWrapper take = null;
         while (take == null) {
             try {

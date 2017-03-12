@@ -4,7 +4,7 @@ import org.apache.http.annotation.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.PlainText;
 
@@ -88,7 +88,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
     }
 
     @Override
-    public Page download(Request request, Task task) {
+    public Page download(DownloadRequest request, Task task) {
         if (logger.isInfoEnabled()) {
             logger.info("downloading page: " + request.getUrl());
         }
@@ -121,7 +121,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
         this.threadNum = threadNum;
     }
 
-    protected String getPage(Request request) {
+    protected String getPage(DownloadRequest request) {
         try {
             String url = request.getUrl();
             Runtime runtime = Runtime.getRuntime();

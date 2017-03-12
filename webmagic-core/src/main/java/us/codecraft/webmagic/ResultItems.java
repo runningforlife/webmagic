@@ -17,7 +17,7 @@ public class ResultItems {
 
     private Map<String, Object> fields = new LinkedHashMap<String, Object>();
 
-    private Request request;
+    private DownloadRequest request;
 
     private boolean skip;
 
@@ -38,11 +38,11 @@ public class ResultItems {
         return this;
     }
 
-    public Request getRequest() {
+    public DownloadRequest getRequest() {
         return request;
     }
 
-    public ResultItems setRequest(Request request) {
+    public ResultItems setRequest(DownloadRequest request) {
         this.request = request;
         return this;
     }

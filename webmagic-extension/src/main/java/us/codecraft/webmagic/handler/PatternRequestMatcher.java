@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.handler;
 
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 
 import java.util.regex.Pattern;
 
@@ -31,7 +31,7 @@ public abstract class PatternRequestMatcher implements RequestMatcher {
     }
 
     @Override
-    public boolean match(Request request) {
+    public boolean match(DownloadRequest request) {
         return patternCompiled.matcher(request.getUrl()).matches();
     }
 }

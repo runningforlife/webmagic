@@ -8,7 +8,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
@@ -45,12 +45,12 @@ public class HttpClientDownloaderTest {
     public void testCycleTriedTimes() {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         Task task = Site.me().setDomain("localhost").setCycleRetryTimes(5).toTask();
-        Request request = new Request(PAGE_ALWAYS_NOT_EXISTS);
+        DownloadRequest request = new DownloadRequest(PAGE_ALWAYS_NOT_EXISTS);
         Page page = httpClientDownloader.download(request, task);
         assertThat(page.getTargetRequests().size() > 0);
-        assertThat((Integer) page.getTargetRequests().get(0).getExtra(Request.CYCLE_TRIED_TIMES)).isEqualTo(1);
+        assertThat((Integer) page.getTargetRequests().get(0).getExtra(DownloadRequest.CYCLE_TRIED_TIMES)).isEqualTo(1);
         page = httpClientDownloader.download(page.getTargetRequests().get(0), task);
-        assertThat((Integer) page.getTargetRequests().get(0).getExtra(Request.CYCLE_TRIED_TIMES)).isEqualTo(2);
+        assertThat((Integer) page.getTargetRequests().get(0).getExtra(DownloadRequest.CYCLE_TRIED_TIMES)).isEqualTo(2);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class HttpClientDownloaderTest {
                 Site site = Site.me();
                 CloseableHttpClient httpClient = new HttpClientGenerator().getClient(site, null);
                 // encoding in http header Content-Type
-                Request requestGBK = new Request(url);
+                DownloadRequest requestGBK = new DownloadRequest(url);
                 CloseableHttpResponse httpResponse = null;
                 try {
                     httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestGBK, site, null,null));

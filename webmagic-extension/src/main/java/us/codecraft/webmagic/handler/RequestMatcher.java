@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.handler;
 
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 
 /**
  * @author code4crafer@gmail.com
@@ -16,7 +16,7 @@ public interface RequestMatcher {
      *
      * @return whether matches
      */
-    public boolean match(Request page);
+    public boolean match(DownloadRequest page);
 
     public enum MatchOther {
         YES, NO

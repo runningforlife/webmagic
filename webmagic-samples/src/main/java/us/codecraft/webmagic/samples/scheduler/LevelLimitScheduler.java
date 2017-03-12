@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.samples.scheduler;
 
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.PriorityScheduler;
 
@@ -16,7 +16,7 @@ public class LevelLimitScheduler extends PriorityScheduler {
     }
 
     @Override
-    public synchronized void push(Request request, Task task) {
+    public synchronized void push(DownloadRequest request, Task task) {
         if (((Integer) request.getExtra("_level")) <= levelLimit) {
             super.push(request, task);
         }

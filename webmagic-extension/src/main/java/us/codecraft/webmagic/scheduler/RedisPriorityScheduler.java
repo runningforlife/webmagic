@@ -5,7 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 
 import java.util.Set;
@@ -37,7 +37,7 @@ public class RedisPriorityScheduler extends RedisScheduler
     }
 
     @Override
-    protected void pushWhenNoDuplicate(Request request, Task task)
+    protected void pushWhenNoDuplicate(DownloadRequest request, Task task)
     {
         Jedis jedis = pool.getResource();
         try
@@ -58,7 +58,7 @@ public class RedisPriorityScheduler extends RedisScheduler
     }
 
     @Override
-    public synchronized Request poll(Task task)
+    public synchronized DownloadRequest poll(Task task)
     {
         Jedis jedis = pool.getResource();
         try
@@ -128,7 +128,7 @@ public class RedisPriorityScheduler extends RedisScheduler
         return ZSET_PREFIX + task.getUUID() + MINUS_PRIORITY_SUFFIX;
     }
 
-    private void setExtrasInItem(Jedis jedis,Request request, Task task)
+    private void setExtrasInItem(Jedis jedis,DownloadRequest request, Task task)
     {
         if(request.getExtras() != null)
         {
@@ -138,13 +138,13 @@ public class RedisPriorityScheduler extends RedisScheduler
         }
     }
 
-    private Request getExtrasInItem(Jedis jedis, String url, Task task)
+    private DownloadRequest getExtrasInItem(Jedis jedis, String url, Task task)
     {
         String key      = getItemKey(task);
         String field    = DigestUtils.shaHex(url);
         byte[] bytes    = jedis.hget(key.getBytes(), field.getBytes());
         if(bytes != null)
-            return JSON.parseObject(new String(bytes), Request.class);
-        return new Request(url);
+            return JSON.parseObject(new String(bytes), DownloadRequest.class);
+        return new DownloadRequest(url);
     }
 }

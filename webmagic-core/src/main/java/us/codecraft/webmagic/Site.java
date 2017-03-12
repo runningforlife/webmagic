@@ -31,7 +31,7 @@ public class Site {
     /**
      * startUrls is the urls the crawler to start with.
      */
-    private List<Request> startRequests = new ArrayList<Request>();
+    private List<DownloadRequest> startRequests = new ArrayList<DownloadRequest>();
 
     private int sleepTime = 5000;
 
@@ -237,7 +237,7 @@ public class Site {
         return UrlUtils.convertToUrls(startRequests);
     }
 
-    public List<Request> getStartRequests() {
+    public List<DownloadRequest> getStartRequests() {
         return startRequests;
     }
 
@@ -251,19 +251,19 @@ public class Site {
      * @deprecated
      */
     public Site addStartUrl(String startUrl) {
-        return addStartRequest(new Request(startUrl));
+        return addStartRequest(new DownloadRequest(startUrl));
     }
 
     /**
      * Add a url to start url.<br>
-     * Because urls are more a Spider's property than Site, move it to {@link Spider#addRequest(Request...)}}
+     * Because urls are more a Spider's property than Site, move it to {@link Spider#addRequest(DownloadRequest...)}}
      *
      * @param startRequest startRequest
      * @return this
-     * @see Spider#addRequest(Request...)
+     * @see Spider#addRequest(DownloadRequest...)
      * @deprecated
      */
-    public Site addStartRequest(Request startRequest) {
+    public Site addStartRequest(DownloadRequest startRequest) {
         this.startRequests.add(startRequest);
         if (domain == null && startRequest.getUrl() != null) {
             domain = UrlUtils.getDomain(startRequest.getUrl());

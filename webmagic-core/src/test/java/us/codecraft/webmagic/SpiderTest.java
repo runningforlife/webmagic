@@ -58,7 +58,7 @@ public class SpiderTest {
             }
         }).setDownloader(new Downloader() {
             @Override
-            public Page download(Request request, Task task) {
+            public Page download(DownloadRequest request, Task task) {
                 return new Page().setRawText("");
             }
 
@@ -73,19 +73,19 @@ public class SpiderTest {
             private Random random = new Random();
 
             @Override
-            public void push(Request request, Task task) {
+            public void push(DownloadRequest request, Task task) {
 
             }
 
             @Override
-            public synchronized Request poll(Task task) {
+            public synchronized DownloadRequest poll(Task task) {
                 if (count.incrementAndGet() > 1000) {
                     return null;
                 }
                 if (random.nextInt(100)>90){
                     return null;
                 }
-                return new Request("test");
+                return new DownloadRequest("test");
             }
         }).thread(10);
         spider.run();

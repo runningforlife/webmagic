@@ -5,7 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
@@ -45,7 +45,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
-    public boolean isDuplicate(Request request, Task task) {
+    public boolean isDuplicate(DownloadRequest request, Task task) {
         Jedis jedis = pool.getResource();
         try {
             return jedis.sadd(getSetKey(task), request.getUrl()) > 0;
@@ -56,7 +56,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
-    protected void pushWhenNoDuplicate(Request request, Task task) {
+    protected void pushWhenNoDuplicate(DownloadRequest request, Task task) {
         Jedis jedis = pool.getResource();
         try {
             jedis.rpush(getQueueKey(task), request.getUrl());
@@ -71,7 +71,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
-    public synchronized Request poll(Task task) {
+    public synchronized DownloadRequest poll(Task task) {
         Jedis jedis = pool.getResource();
         try {
             String url = jedis.lpop(getQueueKey(task));
@@ -82,10 +82,10 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             String field = DigestUtils.shaHex(url);
             byte[] bytes = jedis.hget(key.getBytes(), field.getBytes());
             if (bytes != null) {
-                Request o = JSON.parseObject(new String(bytes), Request.class);
+                DownloadRequest o = JSON.parseObject(new String(bytes), DownloadRequest.class);
                 return o;
             }
-                Request request = new Request(url);
+                DownloadRequest request = new DownloadRequest(url);
             return request;
         } finally {
             pool.returnResource(jedis);

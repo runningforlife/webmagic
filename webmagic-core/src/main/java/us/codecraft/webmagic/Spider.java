@@ -65,7 +65,7 @@ public class Spider implements Runnable, Task {
 
     protected PageProcessor pageProcessor;
 
-    protected List<Request> startRequests;
+    protected List<DownloadRequest> startRequests;
 
     protected Site site;
 
@@ -149,7 +149,7 @@ public class Spider implements Runnable, Task {
      * @param startRequests startRequests
      * @return this
      */
-    public Spider startRequest(List<Request> startRequests) {
+    public Spider startRequest(List<DownloadRequest> startRequests) {
         checkIfRunning();
         this.startRequests = startRequests;
         return this;
@@ -192,7 +192,7 @@ public class Spider implements Runnable, Task {
         Scheduler oldScheduler = this.scheduler;
         this.scheduler = scheduler;
         if (oldScheduler != null) {
-            Request request;
+            DownloadRequest request;
             while ((request = oldScheduler.poll(this)) != null) {
                 this.scheduler.push(request, this);
             }
@@ -291,7 +291,7 @@ public class Spider implements Runnable, Task {
             }
         }
         if (startRequests != null) {
-            for (Request request : startRequests) {
+            for (DownloadRequest request : startRequests) {
                 addRequest(request);
             }
             startRequests.clear();
@@ -305,7 +305,7 @@ public class Spider implements Runnable, Task {
         initComponent();
         logger.info("Spider " + getUUID() + " started!");
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
-            final Request request = scheduler.poll(this);
+            final DownloadRequest request = scheduler.poll(this);
             if (request == null) {
                 if (threadPool.getThreadAlive() == 0 && exitWhenComplete) {
                     break;
@@ -337,7 +337,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    protected void onError(Request request) {
+    protected void onError(DownloadRequest request) {
         if (CollectionUtils.isNotEmpty(spiderListeners)) {
             for (SpiderListener spiderListener : spiderListeners) {
                 spiderListener.onError(request);
@@ -345,7 +345,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    protected void onSuccess(Request request) {
+    protected void onSuccess(DownloadRequest request) {
         if (CollectionUtils.isNotEmpty(spiderListeners)) {
             for (SpiderListener spiderListener : spiderListeners) {
                 spiderListener.onSuccess(request);
@@ -394,12 +394,12 @@ public class Spider implements Runnable, Task {
         initComponent();
         if (urls.length > 0) {
             for (String url : urls) {
-                processRequest(new Request(url));
+                processRequest(new DownloadRequest(url));
             }
         }
     }
 
-    protected void processRequest(Request request) {
+    protected void processRequest(DownloadRequest request) {
         Page page = downloader.download(request, this);
         if (page == null) {
             sleep(site.getSleepTime());
@@ -420,7 +420,7 @@ public class Spider implements Runnable, Task {
             }
         }
         //for proxy status management
-        request.putExtra(Request.STATUS_CODE, page.getStatusCode());
+        request.putExtra(DownloadRequest.STATUS_CODE, page.getStatusCode());
         sleep(site.getSleepTime());
     }
 
@@ -434,13 +434,13 @@ public class Spider implements Runnable, Task {
 
     protected void extractAndAddRequests(Page page, boolean spawnUrl) {
         if (spawnUrl && CollectionUtils.isNotEmpty(page.getTargetRequests())) {
-            for (Request request : page.getTargetRequests()) {
+            for (DownloadRequest request : page.getTargetRequests()) {
                 addRequest(request);
             }
         }
     }
 
-    private void addRequest(Request request) {
+    private void addRequest(DownloadRequest request) {
         if (site.getDomain() == null && request != null && request.getUrl() != null) {
             site.setDomain(UrlUtils.getDomain(request.getUrl()));
         }
@@ -467,7 +467,7 @@ public class Spider implements Runnable, Task {
      */
     public Spider addUrl(String... urls) {
         for (String url : urls) {
-            addRequest(new Request(url));
+            addRequest(new DownloadRequest(url));
         }
         signalNewUrl();
         return this;
@@ -483,7 +483,7 @@ public class Spider implements Runnable, Task {
         destroyWhenExit = false;
         spawnUrl = false;
         startRequests.clear();
-        for (Request request : UrlUtils.convertToRequests(urls)) {
+        for (DownloadRequest request : UrlUtils.convertToRequests(urls)) {
             addRequest(request);
         }
         CollectorPipeline collectorPipeline = getCollectorPipeline();
@@ -514,8 +514,8 @@ public class Spider implements Runnable, Task {
      * @param requests requests
      * @return this
      */
-    public Spider addRequest(Request... requests) {
-        for (Request request : requests) {
+    public Spider addRequest(DownloadRequest... requests) {
+        for (DownloadRequest request : requests) {
             addRequest(request);
         }
         signalNewUrl();

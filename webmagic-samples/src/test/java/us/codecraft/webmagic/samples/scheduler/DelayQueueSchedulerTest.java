@@ -2,7 +2,7 @@ package us.codecraft.webmagic.samples.scheduler;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,9 +15,9 @@ public class DelayQueueSchedulerTest {
     @Test
     public void test() {
         DelayQueueScheduler delayQueueScheduler = new DelayQueueScheduler(1, TimeUnit.SECONDS);
-        delayQueueScheduler.push(new Request("1"), null);
+        delayQueueScheduler.push(new DownloadRequest("1"), null);
         while (true){
-            Request poll = delayQueueScheduler.poll(null);
+            DownloadRequest poll = delayQueueScheduler.poll(null);
             System.out.println(System.currentTimeMillis()+"\t"+poll);
         }
     }

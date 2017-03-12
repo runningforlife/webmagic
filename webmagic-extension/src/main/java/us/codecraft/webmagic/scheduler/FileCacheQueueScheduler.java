@@ -2,7 +2,7 @@ package us.codecraft.webmagic.scheduler;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
@@ -42,7 +42,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
 
     private AtomicBoolean inited = new AtomicBoolean(false);
 
-    private BlockingQueue<Request> queue;
+    private BlockingQueue<DownloadRequest> queue;
 
     private Set<String> urls;
     
@@ -78,7 +78,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
         setDuplicateRemover(
                 new DuplicateRemover() {
                     @Override
-                    public boolean isDuplicate(Request request, Task task) {
+                    public boolean isDuplicate(DownloadRequest request, Task task) {
                         if (!inited.get()) {
                             init(task);
                         }
@@ -118,7 +118,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
 
     private void readFile() {
         try {
-            queue = new LinkedBlockingQueue<Request>();
+            queue = new LinkedBlockingQueue<DownloadRequest>();
             urls = new LinkedHashSet<String>();
             readCursorFile();
             readUrlFile();
@@ -141,7 +141,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
                 urls.add(line.trim());
                 lineReaded++;
                 if (lineReaded > cursor.get()) {
-                    queue.add(new Request(line));
+                    queue.add(new DownloadRequest(line));
                 }
             }
         } finally {
@@ -178,7 +178,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     @Override
-    protected void pushWhenNoDuplicate(Request request, Task task) {
+    protected void pushWhenNoDuplicate(DownloadRequest request, Task task) {
         if (!inited.get()) {
             init(task);
         }
@@ -187,7 +187,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     @Override
-    public synchronized Request poll(Task task) {
+    public synchronized DownloadRequest poll(Task task) {
         if (!inited.get()) {
             init(task);
         }

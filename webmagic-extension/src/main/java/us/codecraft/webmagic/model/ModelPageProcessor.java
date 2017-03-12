@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.model;
 
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selector;
@@ -70,7 +70,7 @@ class ModelPageProcessor implements PageProcessor {
             for (Pattern targetUrlPattern : urlPatterns) {
                 Matcher matcher = targetUrlPattern.matcher(link);
                 if (matcher.find()) {
-                    page.addTargetRequest(new Request(matcher.group(1)));
+                    page.addTargetRequest(new DownloadRequest(matcher.group(1)));
                 }
             }
         }

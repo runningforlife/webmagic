@@ -20,7 +20,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.proxy.Proxy;
@@ -70,7 +70,7 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     @Override
-    public Page download(Request request, Task task) {
+    public Page download(DownloadRequest request, Task task) {
         Site site = null;
         if (task != null) {
             site = task.getSite();
@@ -101,7 +101,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);
             httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);
             statusCode = httpResponse.getStatusLine().getStatusCode();
-            request.putExtra(Request.STATUS_CODE, statusCode);
+            request.putExtra(DownloadRequest.STATUS_CODE, statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {
                 Page page = handleResponse(request, charset, httpResponse, task);
                 onSuccess(request);
@@ -118,10 +118,10 @@ public class HttpClientDownloader extends AbstractDownloader {
             onError(request);
             return null;
         } finally {
-        	request.putExtra(Request.STATUS_CODE, statusCode);
+        	request.putExtra(DownloadRequest.STATUS_CODE, statusCode);
             if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
-                site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
-                        .getExtra(Request.STATUS_CODE));
+                site.returnHttpProxyToPool((HttpHost) request.getExtra(DownloadRequest.PROXY), (Integer) request
+                        .getExtra(DownloadRequest.STATUS_CODE));
             }
             try {
                 if (httpResponse != null) {
@@ -143,7 +143,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         return acceptStatCode.contains(statusCode);
     }
 
-    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers,HttpHost proxy) {
+    protected HttpUriRequest getHttpUriRequest(DownloadRequest request, Site site, Map<String, String> headers,HttpHost proxy) {
         RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
@@ -157,13 +157,13 @@ public class HttpClientDownloader extends AbstractDownloader {
                 .setCookieSpec(CookieSpecs.BEST_MATCH);
         if (proxy !=null) {
 			requestConfigBuilder.setProxy(proxy);
-			request.putExtra(Request.PROXY, proxy);
+			request.putExtra(DownloadRequest.PROXY, proxy);
 		}
         requestBuilder.setConfig(requestConfigBuilder.build());
         return requestBuilder.build();
     }
 
-    protected RequestBuilder selectRequestMethod(Request request) {
+    protected RequestBuilder selectRequestMethod(DownloadRequest request) {
         String method = request.getMethod();
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
@@ -187,7 +187,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
     }
 
-    protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
+    protected Page handleResponse(DownloadRequest request, String charset, HttpResponse httpResponse, Task task) throws IOException {
         String content = getContent(charset, httpResponse);
         Page page = new Page();
         page.setRawText(content);

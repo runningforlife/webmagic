@@ -2,7 +2,7 @@ package us.codecraft.webmagic.scheduler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 import us.codecraft.webmagic.scheduler.component.HashSetDuplicateRemover;
@@ -29,7 +29,7 @@ public abstract class DuplicateRemovedScheduler implements Scheduler {
     }
 
     @Override
-    public void push(Request request, Task task) {
+    public void push(DownloadRequest request, Task task) {
         logger.trace("get a candidate url {}", request.getUrl());
         if (!duplicatedRemover.isDuplicate(request, task) || shouldReserved(request)) {
             logger.debug("push to queue {}", request.getUrl());
@@ -37,11 +37,11 @@ public abstract class DuplicateRemovedScheduler implements Scheduler {
         }
     }
 
-    protected boolean shouldReserved(Request request) {
-        return request.getExtra(Request.CYCLE_TRIED_TIMES) != null;
+    protected boolean shouldReserved(DownloadRequest request) {
+        return request.getExtra(DownloadRequest.CYCLE_TRIED_TIMES) != null;
     }
 
-    protected void pushWhenNoDuplicate(Request request, Task task) {
+    protected void pushWhenNoDuplicate(DownloadRequest request, Task task) {
 
     }
 }

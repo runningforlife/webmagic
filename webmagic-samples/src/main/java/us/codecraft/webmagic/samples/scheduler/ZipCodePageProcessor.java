@@ -2,7 +2,7 @@ package us.codecraft.webmagic.samples.scheduler;
 
 import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -39,7 +39,7 @@ public class ZipCodePageProcessor implements PageProcessor {
         for (String province : provinces) {
             String link = xpath("//@href").select(province);
             String title = xpath("/text()").select(province);
-            Request request = new Request(link).setPriority(0).putExtra("province", title);
+            DownloadRequest request = new DownloadRequest(link).setPriority(0).putExtra("province", title);
             page.addTargetRequest(request);
         }
     }
@@ -53,7 +53,7 @@ public class ZipCodePageProcessor implements PageProcessor {
             while (matcher.find()) {
                 String title = matcher.group(1);
                 String link = matcher.group(2);
-                Request request = new Request(link).setPriority(1).putExtra("province", page.getRequest().getExtra("province")).putExtra("district", title);
+                DownloadRequest request = new DownloadRequest(link).setPriority(1).putExtra("province", page.getRequest().getExtra("province")).putExtra("district", title);
                 page.addTargetRequest(request);
             }
         }
@@ -67,7 +67,7 @@ public class ZipCodePageProcessor implements PageProcessor {
                 zipCode}, "\t"));
         List<String> links = page.getHtml().links().regex("http://www\\.ip138\\.com/\\d{6}[/]?$").all();
         for (String link : links) {
-            page.addTargetRequest(new Request(link).setPriority(2).putExtra("province", province).putExtra("district", district));
+            page.addTargetRequest(new DownloadRequest(link).setPriority(2).putExtra("province", province).putExtra("district", district));
         }
 
     }

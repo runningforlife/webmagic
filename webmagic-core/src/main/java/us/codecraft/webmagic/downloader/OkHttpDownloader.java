@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.AbstractDownloader;
@@ -25,7 +25,7 @@ public class OkHttpDownloader extends AbstractDownloader{
 	private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	@Override
-	public Page download(Request request, Task task) {
+	public Page download(DownloadRequest request, Task task) {
         Site site = null;
         if (task != null) {
             site = task.getSite();
@@ -48,7 +48,7 @@ public class OkHttpDownloader extends AbstractDownloader{
 		
 		OkHttpClient client = HttpClientFactory.getClient(site, null);
 		
-		//Request request;
+		//DownloadRequest request;
 		
 		return null;
 	}

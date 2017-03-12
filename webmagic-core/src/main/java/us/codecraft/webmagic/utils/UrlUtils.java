@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -127,17 +127,17 @@ public class UrlUtils {
         return stringBuilder.toString();
     }
 
-    public static List<Request> convertToRequests(Collection<String> urls) {
-        List<Request> requestList = new ArrayList<Request>(urls.size());
+    public static List<DownloadRequest> convertToRequests(Collection<String> urls) {
+        List<DownloadRequest> requestList = new ArrayList<DownloadRequest>(urls.size());
         for (String url : urls) {
-            requestList.add(new Request(url));
+            requestList.add(new DownloadRequest(url));
         }
         return requestList;
     }
 
-    public static List<String> convertToUrls(Collection<Request> requests) {
+    public static List<String> convertToUrls(Collection<DownloadRequest> requests) {
         List<String> urlList = new ArrayList<String>(requests.size());
-        for (Request request : requests) {
+        for (DownloadRequest request : requests) {
             urlList.add(request.getUrl());
         }
         return urlList;

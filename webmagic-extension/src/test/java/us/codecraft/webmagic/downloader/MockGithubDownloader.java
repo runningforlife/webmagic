@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.downloader;
 
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
@@ -935,10 +935,10 @@ public class MockGithubDownloader implements Downloader{
             "</html>\n" +
             "\n";
     @Override
-    public Page download(Request request, Task task) {
+    public Page download(DownloadRequest request, Task task) {
         Page page = new Page();
         page.setHtml(new Html(html));
-        page.setRequest(new Request("https://github.com/code4craft/webmagic"));
+        page.setRequest(new DownloadRequest("https://github.com/code4craft/webmagic"));
         page.setUrl(new PlainText("https://github.com/code4craft/webmagic"));
         return page;
     }

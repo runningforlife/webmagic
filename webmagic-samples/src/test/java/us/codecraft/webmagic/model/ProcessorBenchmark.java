@@ -3,7 +3,7 @@ package us.codecraft.webmagic.model;
 import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.samples.OschinaBlog;
 import us.codecraft.webmagic.selector.Html;
@@ -19,7 +19,7 @@ public class ProcessorBenchmark {
     public void test() {
         ModelPageProcessor modelPageProcessor = ModelPageProcessor.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"), OschinaBlog.class);
         Page page = new Page();
-        page.setRequest(new Request("http://my.oschina.net/flashsword/blog"));
+        page.setRequest(new DownloadRequest("http://my.oschina.net/flashsword/blog"));
         page.setUrl(new PlainText("http://my.oschina.net/flashsword/blog"));
         page.setHtml(new Html(html));
         long time = System.currentTimeMillis();

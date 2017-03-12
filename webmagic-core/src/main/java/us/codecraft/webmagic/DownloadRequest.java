@@ -13,7 +13,7 @@ import java.util.Map;
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
  */
-public class Request implements Serializable {
+public class DownloadRequest implements Serializable {
 
     private static final long serialVersionUID = 2062192774891352043L;
 
@@ -37,10 +37,10 @@ public class Request implements Serializable {
      */
     private long priority;
 
-    public Request() {
+    public DownloadRequest() {
     }
 
-    public Request(String url) {
+    public DownloadRequest(String url) {
         this.url = url;
     }
 
@@ -57,7 +57,7 @@ public class Request implements Serializable {
      * @return this
      */
     @Experimental
-    public Request setPriority(long priority) {
+    public DownloadRequest setPriority(long priority) {
         this.priority = priority;
         return this;
     }
@@ -69,7 +69,7 @@ public class Request implements Serializable {
         return extras.get(key);
     }
 
-    public Request putExtra(String key, Object value) {
+    public DownloadRequest putExtra(String key, Object value) {
         if (extras == null) {
             extras = new HashMap<String, Object>();
         }
@@ -86,7 +86,7 @@ public class Request implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Request request = (Request) o;
+        DownloadRequest request = (DownloadRequest) o;
 
         if (!url.equals(request.url)) return false;
 
@@ -126,7 +126,7 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        return "Request{" +
+        return "DownloadRequest{" +
                 "url='" + url + '\'' +
                 ", method='" + method + '\'' +
                 ", extras=" + extras +

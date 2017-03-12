@@ -2,7 +2,7 @@ package us.codecraft.webmagic.monitor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.SpiderListener;
 import us.codecraft.webmagic.utils.Experimental;
@@ -81,12 +81,12 @@ public class SpiderMonitor {
         private List<String> errorUrls = Collections.synchronizedList(new ArrayList<String>());
 
         @Override
-        public void onSuccess(Request request) {
+        public void onSuccess(DownloadRequest request) {
             successCount.incrementAndGet();
         }
 
         @Override
-        public void onError(Request request) {
+        public void onError(DownloadRequest request) {
             errorUrls.add(request.getUrl());
             errorCount.incrementAndGet();
         }

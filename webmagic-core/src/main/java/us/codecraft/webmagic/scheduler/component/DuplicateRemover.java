@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.scheduler.component;
 
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 
 /**
@@ -17,7 +17,7 @@ public interface DuplicateRemover {
      * @param task task
      * @return true if is duplicate
      */
-    public boolean isDuplicate(Request request, Task task);
+    public boolean isDuplicate(DownloadRequest request, Task task);
 
     /**
      * Reset duplicate check.

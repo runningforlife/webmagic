@@ -47,7 +47,7 @@ public class FileCache extends FilePersistentBase implements Downloader, Pipelin
     }
 
     @Override
-    public Page download(Request request, Task task) {
+    public Page download(DownloadRequest request, Task task) {
         String path = this.path + "/" + task.getUUID() + "/";
         Page page = null;
         try {
@@ -91,7 +91,7 @@ public class FileCache extends FilePersistentBase implements Downloader, Pipelin
         return htmlBuilder.toString();
     }
 
-    private Page downloadWhenMiss(Request request, Task task) {
+    private Page downloadWhenMiss(DownloadRequest request, Task task) {
         Page page = null;
         if (downloaderWhenFileMiss != null) {
             page = downloaderWhenFileMiss.download(request, task);

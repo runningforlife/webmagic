@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.scheduler;
 
 import org.apache.http.annotation.ThreadSafe;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.utils.NumberUtils;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 /**
- * Priority scheduler. Request with higher priority will poll earlier. <br>
+ * Priority scheduler. DownloadRequest with higher priority will poll earlier. <br>
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.1
@@ -21,24 +21,24 @@ public class PriorityScheduler extends DuplicateRemovedScheduler implements Moni
 
     public static final int INITIAL_CAPACITY = 5;
 
-    private BlockingQueue<Request> noPriorityQueue = new LinkedBlockingQueue<Request>();
+    private BlockingQueue<DownloadRequest> noPriorityQueue = new LinkedBlockingQueue<DownloadRequest>();
 
-    private PriorityBlockingQueue<Request> priorityQueuePlus = new PriorityBlockingQueue<Request>(INITIAL_CAPACITY, new Comparator<Request>() {
+    private PriorityBlockingQueue<DownloadRequest> priorityQueuePlus = new PriorityBlockingQueue<DownloadRequest>(INITIAL_CAPACITY, new Comparator<DownloadRequest>() {
         @Override
-        public int compare(Request o1, Request o2) {
+        public int compare(DownloadRequest o1, DownloadRequest o2) {
             return -NumberUtils.compareLong(o1.getPriority(), o2.getPriority());
         }
     });
 
-    private PriorityBlockingQueue<Request> priorityQueueMinus = new PriorityBlockingQueue<Request>(INITIAL_CAPACITY, new Comparator<Request>() {
+    private PriorityBlockingQueue<DownloadRequest> priorityQueueMinus = new PriorityBlockingQueue<DownloadRequest>(INITIAL_CAPACITY, new Comparator<DownloadRequest>() {
         @Override
-        public int compare(Request o1, Request o2) {
+        public int compare(DownloadRequest o1, DownloadRequest o2) {
             return -NumberUtils.compareLong(o1.getPriority(), o2.getPriority());
         }
     });
 
     @Override
-    public void pushWhenNoDuplicate(Request request, Task task) {
+    public void pushWhenNoDuplicate(DownloadRequest request, Task task) {
         if (request.getPriority() == 0) {
             noPriorityQueue.add(request);
         } else if (request.getPriority() > 0) {
@@ -49,8 +49,8 @@ public class PriorityScheduler extends DuplicateRemovedScheduler implements Moni
     }
 
     @Override
-    public synchronized Request poll(Task task) {
-        Request poll = priorityQueuePlus.poll();
+    public synchronized DownloadRequest poll(Task task) {
+        DownloadRequest poll = priorityQueuePlus.poll();
         if (poll != null) {
             return poll;
         }

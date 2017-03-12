@@ -8,7 +8,7 @@ package us.codecraft.webmagic;
  */
 public interface SpiderListener {
 
-    public void onSuccess(Request request);
+    public void onSuccess(DownloadRequest request);
 
-    public void onError(Request request);
+    public void onError(DownloadRequest request);
 }

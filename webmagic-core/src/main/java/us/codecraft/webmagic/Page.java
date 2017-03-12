@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Page {
 
-    private Request request;
+    private DownloadRequest request;
 
     private ResultItems resultItems = new ResultItems();
 
@@ -42,7 +42,7 @@ public class Page {
 
     private boolean needCycleRetry;
 
-    private List<Request> targetRequests = new ArrayList<Request>();
+    private List<DownloadRequest> targetRequests = new ArrayList<DownloadRequest>();
 
     public Page() {
     }
@@ -97,7 +97,7 @@ public class Page {
         this.html = html;
     }
 
-    public List<Request> getTargetRequests() {
+    public List<DownloadRequest> getTargetRequests() {
         return targetRequests;
     }
 
@@ -112,7 +112,7 @@ public class Page {
                 continue;
             }
             s = UrlUtils.canonicalizeUrl(s, url.toString());
-            targetRequests.add(new Request(s));
+            targetRequests.add(new DownloadRequest(s));
         }
     }
 
@@ -128,7 +128,7 @@ public class Page {
                 continue;
             }
             s = UrlUtils.canonicalizeUrl(s, url.toString());
-            targetRequests.add(new Request(s).setPriority(priority));
+            targetRequests.add(new DownloadRequest(s).setPriority(priority));
         }
     }
 
@@ -142,7 +142,7 @@ public class Page {
             return;
         }
         requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
-        targetRequests.add(new Request(requestString));
+        targetRequests.add(new DownloadRequest(requestString));
     }
 
     /**
@@ -150,7 +150,7 @@ public class Page {
      *
      * @param request request
      */
-    public void addTargetRequest(Request request) {
+    public void addTargetRequest(DownloadRequest request) {
         targetRequests.add(request);
     }
 
@@ -172,7 +172,7 @@ public class Page {
      *
      * @return request
      */
-    public Request getRequest() {
+    public DownloadRequest getRequest() {
         return request;
     }
 
@@ -184,7 +184,7 @@ public class Page {
         this.needCycleRetry = needCycleRetry;
     }
 
-    public void setRequest(Request request) {
+    public void setRequest(DownloadRequest request) {
         this.request = request;
         this.resultItems.setRequest(request);
     }

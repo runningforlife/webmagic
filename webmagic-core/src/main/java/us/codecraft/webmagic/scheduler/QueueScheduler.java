@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.scheduler;
 
 import org.apache.http.annotation.ThreadSafe;
-import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.DownloadRequest;
 import us.codecraft.webmagic.Task;
 
 import java.util.concurrent.BlockingQueue;
@@ -18,15 +18,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 @ThreadSafe
 public class QueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
 
-    private BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();
+    private BlockingQueue<DownloadRequest> queue = new LinkedBlockingQueue<DownloadRequest>();
 
     @Override
-    public void pushWhenNoDuplicate(Request request, Task task) {
+    public void pushWhenNoDuplicate(DownloadRequest request, Task task) {
         queue.add(request);
     }
 
     @Override
-    public Request poll(Task task) {
+    public DownloadRequest poll(Task task) {
         return queue.poll();
     }
 
