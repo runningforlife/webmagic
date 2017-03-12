@@ -4,6 +4,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.downloader.OkHttpDownloader;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.util.ArrayList;
@@ -31,7 +32,9 @@ public class BaiduBaikePageProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         //single download
-        Spider spider = Spider.create(new BaiduBaikePageProcessor()).thread(2);
+        Spider spider = Spider.create(new BaiduBaikePageProcessor())
+        		.setDownloader(new OkHttpDownloader())
+        		.thread(2);
         String urlTemplate = "http://baike.baidu.com/search/word?word=%s&pic=1&sug=1&enc=utf8";
         ResultItems resultItems = spider.<ResultItems>get(String.format(urlTemplate, "水力发电"));
         System.out.println(resultItems);

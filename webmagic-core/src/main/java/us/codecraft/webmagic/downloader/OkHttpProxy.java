@@ -15,7 +15,7 @@ import us.codecraft.webmagic.proxy.Proxy;
  * @date 2017-3-12
  */
 
-public class HttpClientFactory {
+public class OkHttpProxy {
 		
 	private static final int CONNECT_TIMEOUT = 5000;
 	
