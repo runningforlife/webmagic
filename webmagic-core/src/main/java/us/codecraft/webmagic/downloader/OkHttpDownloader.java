@@ -3,6 +3,8 @@ package us.codecraft.webmagic.downloader;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,8 @@ import us.codecraft.webmagic.selector.PlainText;
 public class OkHttpDownloader extends AbstractDownloader{
 	
 	private Logger LOGGER = LoggerFactory.getLogger(getClass());
+	
+	private final static String REG_IMAGES = "(?m)(?s)<img\\s+(.*)src\\s*=\\s*\"([^\"]+)\"(.*)(\\.(gif|jpg|png))$";
 
 	@Override
 	public Page download(DownloadRequest request, Task task) {
@@ -34,7 +38,7 @@ public class OkHttpDownloader extends AbstractDownloader{
         }
         
         int statusCode = 0;
-		
+        
 		LOGGER.info("download page url{}" + request.getUrl());
 				
 		Request httpRequest = new Request.Builder()
@@ -88,7 +92,6 @@ public class OkHttpDownloader extends AbstractDownloader{
 
 		try {
 			content = resp.body().string();
-			LOGGER.info(content);
 			
 			page.setRawText(content);
 			page.setRequest(request);
@@ -100,6 +103,13 @@ public class OkHttpDownloader extends AbstractDownloader{
 		}
 		
 		return page;
+	}
+	
+	private boolean isImageUrl(String url){
+		Pattern pattern = Pattern.compile(REG_IMAGES);
+		Matcher matcher = pattern.matcher(url);
+		
+		return matcher.matches();
 	}
 
 }
